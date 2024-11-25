@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Virtual Reality</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <!-- Assets utilizados no projeto -->
+      <a-assets>
+        <audio
+          id="click-sound"
+          src="https://cdn.aframe.io/360-image-gallery-boilerplate/audio/click.ogg"
+        ></audio>
+        <img id="img" src="./fotos/ruazinha_inteli.jpg" />
+        <img id="imgEscada" src="./fotos/ruazinha_inteli.jpg" />
+      </a-assets>
+
+      <!-- Camera + Cursor. -->
+      <a-camera position="0 1 0" id="cameraCena">
+        <a-cursor intersection-spawn="Event: click; mixin:voxel;"> </a-cursor>
+      </a-camera>
+
+      <a-sky id="img-360" radius="30" src="#img"> </a-sky>
+      <!-- <a-sphere  material="#img"> </a-sphere> -->
+
+      <a-sphere
+        id="vai_para_cima"
+        position="-15 0.5 2"
+        radius="0.25  "
+        color="#ed1212"
+      ></a-sphere>
+    </a-scene>
+  </body>
+  <!-- Cria o script para lidar com a transição -->
+  <script>
+    document
+      .querySelector('#vai_para_cima')
+      .addEventListener('mouseenter', e => {
+        location.href = 'rua1.html'
+      })
+
+    const camera = document.querySelector('#cameraCena')
+    const cursor = document.querySelector('a-cursor')
+
+    // Log the cursor's world coordinates based on its ray direction
+    cursor.addEventListener('click', () => {
+      // Get the direction of the ray from the camera
+      const cameraEl = camera.object3D
+      const direction = new THREE.Vector3()
+      cameraEl.getWorldDirection(direction) // Ray direction in 3D space
+
+      // Project this ray onto a virtual sphere (360-sphere coordinates)
+      const sphereRadius = 5000 // Match the radius of the sky element
+      const cursorPosition = direction.multiplyScalar(sphereRadius)
+
+      // Log the coordinates
+      console.log('Cursor coordinates on the sphere:', cursorPosition)
+    })
+  </script>
+</html>
